@@ -1,0 +1,19 @@
+{
+  "name": "Kickoff Draw",
+  "short_name": "Kickoff Draw",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101310",
+  "theme_color": "#101310",
+  "description": "Random football teams for couch Kick Off.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101310">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Kickoff Draw</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="engine.js"></script><script defer src="teams.js"></script><script defer src="app.js"></script>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><script defer src="web.js"></script></head>
+<body>
+<div class="shell">
+  <header class="topbar"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span> KICKOFF<span class="brand-light">DRAW</span></div><span class="offline" id="web-status" role="status"><i></i> WEB APP</span></header>
+  <main>
+    <section id="draw-page" class="page">
+      <div class="eyebrow">FC 26 · COUCH KICK OFF</div>
+      <h1>Leave it to<br><em>the draw.</em></h1>
+      <p class="intro">Your friends. Two teams. No arguments.</p>
+      <div class="sectionline"><span>TONIGHT’S MATCHUP</span><button id="names-button" class="text-button">Edit players ↗</button></div>
+      <div class="matchup" id="matchup" aria-label="Drawn teams">
+        <article class="team-card home" id="home-card"><div class="card-top"><span>HOME</span><span id="player-0">Player 1</span></div><div class="team-body" id="team-0"></div><button id="reroll-0" class="reroll" disabled>↻ Redraw home</button></article>
+        <div class="versus" aria-hidden="true">VS</div>
+        <article class="team-card away" id="away-card"><div class="card-top"><span>AWAY</span><span id="player-1">Player 2</span></div><div class="team-body" id="team-1"></div><button id="reroll-1" class="reroll" disabled>↻ Redraw away</button></article>
+      </div>
+      <div class="match-meta"><span id="match-status">Ready when you are.</span><button id="swap" class="text-button" disabled>⇄ Swap sides</button></div>
+      <button id="draw-button" class="primary draw-button"><span aria-hidden="true">⚄</span> <span id="draw-label">Draw teams</span><span aria-hidden="true">↗</span></button>
+      <div id="draw-message" class="message" role="status" aria-live="polite"></div>
+      <section class="filter-panel" aria-labelledby="filters-title">
+        <div class="sectionline"><h2 id="filters-title">Make the rules</h2><span id="pool-count" class="pool-count"></span></div>
+        <div class="segmented" aria-label="Draw mode"><button data-mode="balanced" aria-pressed="true">Balanced</button><button data-mode="random" aria-pressed="false">Anything goes</button><button data-mode="league" aria-pressed="false">Same league</button></div>
+        <p id="mode-description" class="help"></p>
+        <div class="filter-grid">
+          <label>Category<select id="gender"><option value="men">Men’s teams</option><option value="women">Women’s teams</option><option value="all">All categories</option></select></label>
+          <label>Team type<select id="kind"><option value="club">Clubs</option><option value="national">National teams</option><option value="all">All types</option></select></label>
+          <label class="wide">League<select id="league"><option value="all">All leagues</option></select></label>
+          <label>Minimum stars<select id="min"></select></label><label>Maximum stars<select id="max"></select></label>
+          <label id="gap-label" class="wide">Maximum rating gap<select id="gap"><option value="0">Same star rating</option><option value="0.5">½ star apart</option><option value="1">1 star apart</option><option value="1.5">1½ stars apart</option><option value="2">2 stars apart</option></select></label>
+        </div>
+        <label class="toggle-row"><span><strong>Keep it fresh</strong><small>Skip teams already used in this session</small></span><input id="no-repeats" type="checkbox" role="switch"></label>
+        <div class="sectionline session"><span id="used-count"></span><button id="reset-used" class="text-button">Reset used teams</button></div>
+      </section>
+      <p class="footnote">32-club starter roster · September 2025 ratings.<br>Edit ratings to match your game in Teams.</p>
+    </section>
+    <section id="teams-page" class="page" hidden>
+      <div class="eyebrow">BUILD YOUR POOL</div><h1>Your teams.<br><em>Your rules.</em></h1>
+      <p class="intro">Toggle teams to create a custom draw pool.</p>
+      <div class="toolbar"><button id="add-team" class="primary">+ Add team</button><button id="import-button" class="secondary">Import / export</button></div>
+      <label class="search-label">Search teams<input id="team-search" type="search" placeholder="Team, league or country…" autocomplete="off"></label>
+      <div class="sectionline"><span id="roster-count"></span><button id="enable-all" class="text-button">Enable all</button></div>
+      <div id="roster-list"></div>
+      <details class="data-note"><summary>About the team data</summary><p>The starter pool contains 16 men’s and 16 women’s clubs from the FC 26 star-rating reveal reported by Sports Illustrated on 6 September 2025 (updated 30 September). It is not the complete database and may differ from your installed squad update.</p><p>Source: si.com/soccer/32-highest-rated-teams-ea-sports-fc-26-revealed</p><p>National teams and lower-rated clubs can be added here. Balanced draws use star ratings; no numeric overall ratings are implied. Team badges are generated initials, not official crests.</p><p>Independent fan-made companion. Not affiliated with EA SPORTS.</p></details>
+    </section>
+    <section id="history-page" class="page" hidden>
+      <div class="eyebrow">THE NIGHT SO FAR</div><h1>Good draws.<br><em>Great games.</em></h1><p class="intro">Your last 30 matchups, saved on this device.</p>
+      <div class="sectionline"><span id="history-count"></span><button id="clear-history" class="text-button">Clear history</button></div><div id="history-list"></div>
+    </section>
+  </main>
+  <nav class="bottom-nav" aria-label="Main navigation"><button data-page="draw" aria-current="page"><span aria-hidden="true">⚄</span>Draw</button><button data-page="teams"><span aria-hidden="true">▤</span>Teams</button><button data-page="history"><span aria-hidden="true">◷</span>History</button></nav>
+</div>
+<dialog id="names-dialog"><form id="names-form"><div class="sectionline"><h2>Who’s playing?</h2><button type="button" data-close class="close" aria-label="Close">×</button></div><label>Home player<input id="name-0" maxlength="30" placeholder="Player 1" autocomplete="off"></label><label>Away player<input id="name-1" maxlength="30" placeholder="Player 2" autocomplete="off"></label><button class="primary" type="submit">Save players</button></form></dialog>
+<dialog id="team-dialog"><form id="team-form"><div class="sectionline"><h2 id="team-dialog-title">Add a team</h2><button type="button" data-close class="close" aria-label="Close">×</button></div><label>Team name<input id="edit-name" maxlength="80" required></label><div class="filter-grid"><label>Category<select id="edit-gender"><option value="men">Men</option><option value="women">Women</option></select></label><label>Type<select id="edit-kind"><option value="club">Club</option><option value="national">National</option></select></label></div><label>League / competition<input id="edit-league" maxlength="80" placeholder="e.g. International" required></label><label>Country<input id="edit-country" maxlength="80" required></label><label>Star rating<select id="edit-stars"></select></label><p class="help">Use the rating shown in your installed game.</p><p id="team-error" class="message" role="alert"></p><div class="toolbar"><button class="primary" type="submit">Save team</button><button id="delete-team" class="danger" type="button">Delete</button></div></form></dialog>
+<dialog id="data-dialog"><div class="sectionline"><h2>Take your roster with you</h2><button data-close class="close" aria-label="Close">×</button></div><p class="help">Copy this JSON to back up your roster. To import, replace it with your saved JSON and tap Import roster. Import replaces the team list and resets used teams and the current draw. History stays.</p><label>Roster JSON<textarea id="roster-json" rows="10" spellcheck="false" autocomplete="off"></textarea></label><p id="import-error" class="message" role="alert"></p><button id="select-json" class="secondary">Select all JSON</button><button id="import-confirm" class="primary">Import roster</button></dialog>
+<dialog id="confirm-dialog"><h2 id="confirm-title"></h2><p id="confirm-text" class="help"></p><div class="toolbar"><button id="confirm-cancel" class="secondary">Cancel</button><button id="confirm-yes" class="primary">Confirm</button></div></dialog>
+<script type="application/json" id="version">{"version":"0.1.0"}</script>
+</body></html>
