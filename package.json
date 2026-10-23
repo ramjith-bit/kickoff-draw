@@ -1,8 +1,8 @@
 {
   "name": "kickoff-draw",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Offline Android team randomizer for couch Kick Off",
+  "description": "FC 26 team picker with original crests and FC 27 squad-mod ratings",
   "scripts": {
     "build:web": "node tools/build-web.cjs",
     "test": "node --test tests/*.test.cjs",

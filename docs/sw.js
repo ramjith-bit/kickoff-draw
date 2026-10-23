@@ -1,11 +1,13 @@
 'use strict';
-const CACHE = 'kickoff-draw-414d0e01701e';
+const CACHE = 'kickoff-draw-98ca39cbb6fc';
 const FILES = ["./index.html","./style.css","./engine.js","./teams.js","./app.js","./web.js","./icon.svg","./manifest.webmanifest"];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('kickoff-draw-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
   const request=event.request,url=new URL(request.url);
-  if(request.method!=='GET'||url.origin!==self.location.origin||!url.href.startsWith(self.registration.scope))return;
+  if(request.method!=='GET')return;
+  if(request.destination==='image'&&url.origin==='https://images.fifaindex.com'){event.respondWith(caches.open(CACHE).then(async cache=>{const cached=await cache.match(request);if(cached)return cached;const response=await fetch(request);if(response.ok||response.type==='opaque')await cache.put(request,response.clone());return response;}));return;}
+  if(url.origin!==self.location.origin||!url.href.startsWith(self.registration.scope))return;
   if(request.mode==='navigate'){
     event.respondWith(fetch(request).catch(()=>caches.match(new URL('./index.html',self.registration.scope).href)));
     return;

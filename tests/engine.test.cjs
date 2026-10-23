@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const E = require('../app/src/main/assets/engine.js');
-const roster = require('../app/src/main/assets/teams.js');
+const roster = require('./fixtures/teams-v1.cjs');
 const f = overrides => ({...E.defaults,...overrides});
 const men = roster.filter(t=>t.gender==='men');
 const team = (id,stars=4,extra={})=>({id,name:id,stars,league:'Test league',country:'Test country',gender:'men',kind:'club',...extra});

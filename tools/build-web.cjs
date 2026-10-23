@@ -12,8 +12,8 @@ html = html.replace('</head>', '<link rel="manifest" href="manifest.webmanifest"
 html = html.replace('<span class="offline"><i></i> OFFLINE</span>', '<span class="offline" id="web-status" role="status"><i></i> WEB APP</span>');
 fs.writeFileSync(path.join(out,'index.html'),html);
 fs.writeFileSync(path.join(out,'.nojekyll'),'');
-fs.writeFileSync(path.join(out,'icon.svg'),'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="#101310"/><rect x="34" y="34" width="124" height="124" rx="14" fill="#d6fa75"/><g stroke="#101310" stroke-width="6" fill="none"><path d="M55 55h82v82H55zM96 55v82"/><circle cx="96" cy="96" r="15"/></g></svg>');
-fs.writeFileSync(path.join(out,'manifest.webmanifest'),JSON.stringify({name:'Kickoff Draw',short_name:'Kickoff Draw',id:'./',start_url:'./',scope:'./',display:'standalone',background_color:'#101310',theme_color:'#101310',description:'Random football teams for couch Kick Off.',icons:[{src:'icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]},null,2));
+fs.writeFileSync(path.join(out,'icon.svg'),'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="#f5f3ee"/><rect x="34" y="34" width="124" height="124" rx="14" fill="#254f3b"/><g stroke="#f5f3ee" stroke-width="6" fill="none"><path d="M55 55h82v82H55zM96 55v82"/><circle cx="96" cy="96" r="15"/></g></svg>');
+fs.writeFileSync(path.join(out,'manifest.webmanifest'),JSON.stringify({name:'Kickoff Draw',short_name:'Kickoff Draw',id:'./',start_url:'./',scope:'./',display:'standalone',background_color:'#f5f3ee',theme_color:'#f5f3ee',description:'Random football teams for couch Kick Off.',icons:[{src:'icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]},null,2));
 fs.writeFileSync(path.join(out,'web.js'),`'use strict';
 (function () {
   const status = document.getElementById('web-status');
@@ -35,7 +35,9 @@ self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('kickoff-draw-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
   const request=event.request,url=new URL(request.url);
-  if(request.method!=='GET'||url.origin!==self.location.origin||!url.href.startsWith(self.registration.scope))return;
+  if(request.method!=='GET')return;
+  if(request.destination==='image'&&url.origin==='https://images.fifaindex.com'){event.respondWith(caches.open(CACHE).then(async cache=>{const cached=await cache.match(request);if(cached)return cached;const response=await fetch(request);if(response.ok||response.type==='opaque')await cache.put(request,response.clone());return response;}));return;}
+  if(url.origin!==self.location.origin||!url.href.startsWith(self.registration.scope))return;
   if(request.mode==='navigate'){
     event.respondWith(fetch(request).catch(()=>caches.match(new URL('./index.html',self.registration.scope).href)));
     return;
